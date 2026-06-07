@@ -1,4 +1,5 @@
 import { canvas } from "./main.js";
+import { input } from "./input.js";
 
 class Player {
   constructor(
@@ -19,14 +20,14 @@ class Player {
 
   //actionKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown' , 'a', 'd', 'w', 's'];
   actionKeys = [
-    { key: "ArrowLeft", dx: -1, dy: 0 },
-    { key: "ArrowRight", dx: 1, dy: 0 },
-    { key: "ArrowUp", dx: 0, dy: -1 },
-    { key: "ArrowDown", dx: 0, dy: 1 },
-    { key: "a", dx: -1, dy: 0 },
-    { key: "d", dx: 1, dy: 0 },
-    { key: "w", dx: 0, dy: -1 },
-    { key: "s", dx: 0, dy: 1 },
+    { key: "ArrowLeft", dx: -this.speed, dy: 0 },
+    { key: "ArrowRight", dx: this.speed, dy: 0 },
+    { key: "ArrowUp", dx: 0, dy: -this.speed },
+    { key: "ArrowDown", dx: 0, dy: this.speed },
+    { key: "a", dx: -this.speed, dy: 0 },
+    { key: "d", dx: this.speed, dy: 0 },
+    { key: "w", dx: 0, dy: -this.speed },
+    { key: "s", dx: 0, dy: this.speed },
   ];
 
   draw(ctx) {
@@ -34,12 +35,18 @@ class Player {
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 
-  update(keypressed) {
-    this.actionKeys.forEach((action) => {
-      if (keypressed.isDown(action.key)) {
-        this.x += action.dx * this.speed;
-        this.y += action.dy * this.speed;
+  update() {
+    ///For each grabs the key, dx, dy, of every object in the actionkeys arrays.
+                              ////these are the parameteters of the anymous arrow function 
+    this.actionKeys.forEach(({ key, dx, dy }) => {
+      ///isDown is a method in our input object, we pass the current key.
+      if (input.isDown(key)) {
+        ///Then use the dx and dy parameters to update the players x and y position.
+        this.x += dx;
+        this.y += dy;
       }
     });
   }
 }
+
+export const player = new Player();
